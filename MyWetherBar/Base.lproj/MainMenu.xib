@@ -21,7 +21,7 @@
         </customObject>
         <menu id="sCc-RR-ssP">
             <items>
-                <menuItem id="cHN-Ep-SsE">
+                <menuItem title="更新" id="cHN-Ep-SsE">
                     <attributedString key="attributedTitle">
                         <fragment content="更新">
                             <attributes>
@@ -36,7 +36,8 @@
                         <action selector="UpDateClick:" target="zfS-SG-7JF" id="dXp-6z-kU8"/>
                     </connections>
                 </menuItem>
-                <menuItem id="XKF-dJ-5lI">
+                <menuItem isSeparatorItem="YES" id="h1o-gI-pOO"/>
+                <menuItem title="退出" id="XKF-dJ-5lI">
                     <attributedString key="attributedTitle">
                         <fragment content="退出">
                             <attributes>
@@ -52,7 +53,7 @@
                     </connections>
                 </menuItem>
             </items>
-            <point key="canvasLocation" x="305" y="444.5"/>
+            <point key="canvasLocation" x="85" y="272.5"/>
         </menu>
     </objects>
 </document>
