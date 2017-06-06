@@ -224,6 +224,7 @@
 				TargetAttributes = {
 					6DDDE88D1D50A28800868B28 = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0830;
 					};
 				};
 			};
@@ -415,6 +416,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.hujiele;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -429,6 +431,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.hujiele;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

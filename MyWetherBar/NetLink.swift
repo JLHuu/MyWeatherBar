@@ -19,23 +19,22 @@ class WetherModel: NSObject {
 }
 /// 网络连接
 class NetLink: NSObject {
-    let Session:NSURLSession = NSURLSession.sharedSession()
-    
+    let Session:URLSession = URLSession.shared
     // 获取天气信息 GET
-    func GETWetherInfo(model:WetherModel!,CallBack: (data:NSData?, response:NSURLResponse?, err:NSError?) -> Void) -> () {
+    func GETWetherInfo(_ model:WetherModel!,CallBack: @escaping (_ data:Data?, _ response:URLResponse?, _ err:Error?) -> Void) -> () {
         //
-        let queryItem1 = NSURLQueryItem(name: "key", value: api_src)
-        let queryItem2 = NSURLQueryItem(name: "location", value: model.location)
-        let queryItem3 = NSURLQueryItem(name: "language", value: model.language)
-        let queryItem4 = NSURLQueryItem(name: "unit", value: model.unit)
-        let urlComponents = NSURLComponents(string: baseurl)!
+        let queryItem1 = URLQueryItem(name: "key", value: api_src)
+        let queryItem2 = URLQueryItem(name: "location", value: model.location)
+        let queryItem3 = URLQueryItem(name: "language", value: model.language)
+        let queryItem4 = URLQueryItem(name: "unit", value: model.unit)
+        var urlComponents = URLComponents(string: baseurl)!
         urlComponents.queryItems = [queryItem1,queryItem2,queryItem3,queryItem4]
-        let regURL = urlComponents.URL!
-        let request = NSMutableURLRequest(URL: regURL)
-        request.HTTPMethod = "GET"
-        let task = Session.dataTaskWithRequest(request) { (data, response, error) in
-            CallBack(data: data,response: response,err: error)
-        }
+        let regURL = urlComponents.url!
+        let request = NSMutableURLRequest(url: regURL)
+        request.httpMethod = "GET"
+        let task = Session.dataTask(with: regURL) { (data, response, error) in
+                CallBack(data,response,error)
+            }
         task.resume()
     }
 }
