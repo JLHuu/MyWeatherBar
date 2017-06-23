@@ -9,7 +9,9 @@
 import Cocoa
 
 let lengh:CGFloat = 15
-let time_gap:TimeInterval = 30 // 30s更新一次
+let time_gap:TimeInterval = 300 // 300s更新一次
+var lock = NSLock()
+var resltmodel:Resultmodel?
 class MenuController: NSObject {
     var time:String?
     @IBOutlet weak var Menu: NSMenu!
@@ -21,6 +23,7 @@ class MenuController: NSObject {
     let ReqWether:NetLink = NetLink()
     
     override func awakeFromNib() {
+        resltmodel = Resultmodel()
         let icon =  NSImage.init(named: "99")
         // 状态栏图标显示，false为真彩，ture为黑白
         icon?.isTemplate = false
@@ -31,9 +34,17 @@ class MenuController: NSObject {
         UpdateWetherinfo()
         // 计时器
         Timer.scheduledTimer(timeInterval: time_gap, target: self, selector: #selector(MenuController.TimeAction), userInfo: nil, repeats: true)
+        // 1s更新时间
+       let time2 = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(MenuController.updateTime), userInfo: nil, repeats: true)
+        let loop = RunLoop.current
+        loop.add(time2, forMode: RunLoopMode.commonModes);
+
     }
     func TimeAction() -> Void {
         UpdateWetherinfo()
+    }
+    func updateTime() -> Void {
+        updateUI(resltmodel!)
     }
     func UpdateWetherinfo() -> () {
         let model = WetherModel()
@@ -49,6 +60,7 @@ class MenuController: NSObject {
                 print(dic)
                 let resmodel = Resultmodel()
                 resmodel.setValuesForKeys(dic)
+                resltmodel = resmodel
                 self.updateUI(resmodel)
             }catch {
                 
@@ -57,15 +69,17 @@ class MenuController: NSObject {
         }
     }
     func updateUI(_ model:Resultmodel) -> Void {
+        lock.lock();
         Mymenuitem.image = NSImage.init(named: model.now!["code"] as! String)
-        Mymenuitem.title = (((((self.GetDate() + (model.location!["name"] as? String)!) + " ") + (model.now!["text"] as? String)!) + " ") + (model.now!["temperature"] as? String)!) + " ℃"
+        Mymenuitem.title = ((((((model.location!["name"] as? String)! + " ") + (model.now!["text"] as? String)!) + " ") + (model.now!["temperature"] as? String)!) + " ℃" + "  " + self.GetDate())
         let boundingRect = Mymenuitem.title!.boundingRect(with: CGSize(width: CGFloat(MAXFLOAT), height: 100), options: .usesFontLeading, attributes: [NSFontAttributeName:NSFont.init(name: "PingFang SC", size: 17)!], context: nil)
         Mymenuitem.length = NSVariableStatusItemLength + boundingRect.width
+        lock.unlock();
     }
     
     func GetDate() -> String {
         let formater = DateFormatter()
-        formater.dateFormat = "MM-dd "
+        formater.dateFormat = "MM-dd hh:mm:ss"
         return formater.string(from: Date.init())
     }
     // 退出
