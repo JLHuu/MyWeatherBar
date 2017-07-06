@@ -19,6 +19,7 @@ class MenuController: NSObject {
         self.UpdateWetherinfo()
     }
     let Mymenuitem:NSStatusItem = NSStatusBar.system().statusItem(withLength: NSVariableStatusItemLength)
+
     // 网络请求类
     let ReqWether:NetLink = NetLink()
     
@@ -70,7 +71,7 @@ class MenuController: NSObject {
     }
     func updateUI(_ model:Resultmodel) -> Void {
         lock.lock();
-        Mymenuitem.image = NSImage.init(named: model.now!["code"] as! String)
+        Mymenuitem.image = NSImage.init(named: (model.now?["code"] as? String)!)
         Mymenuitem.title = ((((((model.location!["name"] as? String)! + " ") + (model.now!["text"] as? String)!) + " ") + (model.now!["temperature"] as? String)!) + " ℃" + "  " + self.GetDate())
         let boundingRect = Mymenuitem.title!.boundingRect(with: CGSize(width: CGFloat(MAXFLOAT), height: 100), options: .usesFontLeading, attributes: [NSFontAttributeName:NSFont.init(name: "PingFang SC", size: 17)!], context: nil)
         Mymenuitem.length = NSVariableStatusItemLength + boundingRect.width
